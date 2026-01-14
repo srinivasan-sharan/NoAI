@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>NoAI</title>
+  <style>
+    body { font-family: sans-serif; max-width: 600px; margin: auto; }
+    #messages { border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: auto; }
+    #input { width: 80%; padding: 8px; }
+    #send { padding: 8px; }
+  </style>
+</head>
+<body>
+  <h2>NoAI Smart Chat</h2>
+  <div id="messages"></div>
+  <input id="input" type="text" placeholder="Write a message…" />
+  <button id="send">Send</button>
+
+  <script>
+    const ws = new WebSocket("ws://127.0.0.1:8000/ws");
+
+    const messages = document.getElementById("messages");
+    const input = document.getElementById("input");
+    const send = document.getElementById("send");
+
+    ws.onopen = () => addMsg("Connected to AI Smart Chat");
+    ws.onclose = () => addMsg("Disconnected from AI Smart Chat");
+    ws.onerror = (err) => addMsg("Error: " + err);
+
+    ws.onmessage = (event) => addMsg("NoAI: " + event.data);
+
+    send.onclick = () => {
+      if(input.value.trim()) {
+        ws.send(input.value);
+        addMsg("Me: " + input.value);
+        input.value = "";
+      }
+    };
+
+    input.addEventListener('keydown', e => {
+      if(e.key === 'Enter') send.click();
+    });
+
+    function addMsg(msg) {
+      messages.innerHTML += `<div>${msg}</div>`;
+      messages.scrollTop = messages.scrollHeight;
+    }
+  </script>
+</body>
+</html>
