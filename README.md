@@ -6,3 +6,4 @@ How to use:
 2) Use `python3 -m uvicorn main:app --reload`
 3) Run `index.html` using any local live server.
 4) Done!
+
