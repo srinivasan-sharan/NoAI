@@ -3,15 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <title>NoAI</title>
-  <style>
-    body { font-family: sans-serif; max-width: 600px; margin: auto; }
-    #messages { border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: auto; }
-    #input { width: 80%; padding: 8px; }
-    #send { padding: 8px; }
-  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h2>NoAI Smart Chat</h2>
+    <div class="header">
+        <h2>no.AI</h2>
+        <p>🤞🏻</p>  
+    </div>
   <div id="messages"></div>
   <input id="input" type="text" placeholder="Write a message…" />
   <button id="send">Send</button>
@@ -23,16 +21,16 @@
     const input = document.getElementById("input");
     const send = document.getElementById("send");
 
-    ws.onopen = () => addMsg("Connected to AI Smart Chat");
-    ws.onclose = () => addMsg("Disconnected from AI Smart Chat");
+    ws.onopen = () => addMsg("Welcome to a world of new (im)possiblities");
+    ws.onclose = () => addMsg("Bye!");
     ws.onerror = (err) => addMsg("Error: " + err);
 
-    ws.onmessage = (event) => addMsg("NoAI: " + event.data);
+    ws.onmessage = (event) => addAIMsg(event.data);
 
     send.onclick = () => {
       if(input.value.trim()) {
         ws.send(input.value);
-        addMsg("Me: " + input.value);
+        addUserMsg(input.value);
         input.value = "";
       }
     };
@@ -42,7 +40,17 @@
     });
 
     function addMsg(msg) {
-      messages.innerHTML += `<div>${msg}</div>`;
+      messages.innerHTML += `<div class="center">${msg}</div>`;
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    function addUserMsg(msg) {
+      messages.innerHTML += `<div class="msg user">${msg}</div>`;
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    function addAIMsg(msg) {
+      messages.innerHTML += `<div class="msg ai">${msg}</div>`;
       messages.scrollTop = messages.scrollHeight;
     }
   </script>

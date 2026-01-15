@@ -13,7 +13,6 @@ all_denials = [
     "I appreciate you asking, but I can't.",
     "I'm honoured you asked, but no.",
     "I'm going to have to decline.",
-    "I won't be able to participate.",
     "Thank you, but I'm not interested.",
     "I'm flattered, but I must decline.",
     "I'll have to say no for now.",
@@ -22,10 +21,26 @@ all_denials = [
     "I respectfully decline."
 ]
 
+greetings = [
+    "Hi",
+    "hi",
+    "Hello",
+    "hello",
+    "hey",
+    "Hey"
+]
+
+
+
 @app.websocket("/ws")
 async def websocker_endpoint(websocket: WebSocket):
     await websocket.accept()
     while True:
         data = await websocket.receive_text()
-        random_text_output_index = numpy.random.randint(0, len(all_denials))
-        await websocket.send_text(all_denials[random_text_output_index])
+        if data in greetings:
+            await websocket.send_text("Hello there! How can I assist you today?")
+        elif "why" in data:
+            await websocket.send_text("Brother stop asking why and all")
+        else:
+            random_text_output_index = numpy.random.randint(0, len(all_denials))
+            await websocket.send_text(all_denials[random_text_output_index])

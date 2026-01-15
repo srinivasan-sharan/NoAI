@@ -1,0 +1,161 @@
+:root{
+  --bg: #343541;          /* app background */
+  --panel: #40414f;       /* composer + assistant bubble */
+  --user: #19c37d;        /* user bubble */
+  --text: #ececf1;        /* primary text */
+  --muted: #b4b4bf;       /* subtle text */
+  --border: rgba(255,255,255,.12);
+}
+
+*{ box-sizing: border-box; }
+
+html, body{
+  height: 100%;
+}
+
+body{
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  max-width: none;          /* remove your 600px cap */
+}
+
+/* --- page layout --- */
+
+.header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* first stays left, last goes right */
+  padding: 12px 16px;
+}
+
+h2{
+    margin: 0;
+    padding: 16px 18px;
+    font-size: 30px;
+    font-weight: 600;
+    color: var(--muted);
+}
+
+h3{
+    margin: 0;
+    padding: 16px 18px;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--muted);
+}
+
+#messages{
+  height: calc(100vh - 120px); /* chat area height */
+  overflow-y: auto;
+
+  /* reduce width + center */
+  width: 100%;
+  max-width: 920px;     /* change this value */
+  margin: 0 auto;
+
+  /* keep inner spacing */
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* scrollbar (optional, but closer to ChatGPT feel) */
+#messages::-webkit-scrollbar{ width: 10px; }
+#messages::-webkit-scrollbar-thumb{
+  background: rgba(255,255,255,.8);
+  border-radius: 999px;
+}
+#messages::-webkit-scrollbar-track{ background: transparent; }
+
+/* --- composer row --- */
+#input, #send{
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+}
+
+#input{
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  width: min(920px, calc(100vw - 96px));
+  padding: 14px 52px 14px 14px;  /* space for send button overlay */
+  border-radius: 12px;
+  outline: none;
+  font-size: 15px;
+}
+
+#input::placeholder{ color: rgba(236,236,241,.55); }
+
+#send{
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  margin-left: calc(min(920px, (100vw - 96px)) / 2 - 44px); /* move to right edge */
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  cursor: pointer;
+  padding: 0;
+  font-size: 0;              /* hide "Send" label */
+  display: grid;
+  place-items: center;
+}
+
+/* simple “paper plane” send icon */
+#send::before{
+  content: "➤";
+  font-size: 16px;
+  align-self:last baseline;
+  line-height: 1;
+  opacity: .9;
+}
+
+#send:hover{ filter: brightness(1.08); }
+#send:active{ transform: translateX(-50%) scale(0.98); }
+
+/* --- message bubbles --- */
+/* Your JS should add .msg, plus .user or .ai (assistant). */
+.msg{
+  max-width: min(720px, 90%);
+  padding: 12px 14px;
+  border-radius: 14px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  border: 1px solid var(--border);
+}
+
+.msg.ai{
+  align-self: flex-start;
+  background: var(--panel);
+}
+
+.msg.user{
+  align-self: flex-end;
+  background: rgba(25,195,125,.18);
+  border-color: rgba(25,195,125,.35);
+}
+
+.center{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+/* small “avatar dot” feel (optional) */
+/* .msg.ai::before{
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  margin-right: 8px;
+  background: rgba(236,236,241,.55);
+  vertical-align: middle;
+} */
